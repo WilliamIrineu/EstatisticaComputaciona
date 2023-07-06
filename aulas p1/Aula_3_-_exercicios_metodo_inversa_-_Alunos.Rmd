@@ -1,0 +1,42 @@
+---
+title: "Aula 3 - Exercícios do Método da transformação inversa"
+author: "Prof. Dr. Eder Angelo Milani"
+date: "26/04/2023"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Exercício 1 
+
+Considere a distribuição triangular dada por 
+
+$$\begin{aligned}
+f(x) & = 4x,\mbox{se } 0 < x < 1/2\\
+& = 4-4x, \mbox{se } 1/2\leq x < 1 \\
+& = 0, \mbox{caso contrário}
+\end{aligned}$$
+
+
+Utilizando o método da transformação inversa e apenas valores da distribuição uniforme, gerar 2.000 valores da distribuição triangular definida acima. Obter o histograma com a curva da distribuição.
+
+**Solução:**
+
+
+
+# Exercício 2 
+
+Utilizando apenas a geração de valores aleatórios da distribuição Uniforme(0,1), encontrar uma amostra de tamanho 1.000 da distribuição
+Exponencial deslocada com parâmetros $\lambda=0.75$ e $\tau=10$ ($f(x)=\lambda\exp(-\lambda (x-\tau)), \ x>\tau>0$). Compare o resultado obtido utilizando o histograma.
+
+
+## Solução 
+
+
+# Exercício 3
+
+Simule 10.000 valores da v.a. $X$ que assume apenas os valores $1,2,3, 4$ e $5$, todos com probabilidade $0,20$, ou seja, $X$ tem distribuição Uniforme Discreta. Construa uma tabela de frequência e compare os valores empíricos com os valores teóricos. 
+
+## Solução 

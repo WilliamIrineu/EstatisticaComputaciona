@@ -1,0 +1,203 @@
+---
+title: "Aula 2 - Método da transformação inversa - caso discreto"
+author: "Prof. Dr. Eder Angelo Milani"
+date: "24/04/2023"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Método da Transformação Inversa - Caso Discreto 
+
+
+O método da transformação inversa também pode ser aplicado para distribuições discreta. Se $X$ é uma v.a. discreta e os pontos de descontinuidade da função distribuição acumulada são 
+
+$$x_1 < \ldots<x_{i-1}<x_{i}<x_{i+1}<\ldots< x_k,$$
+
+então a transformação inversa é 
+
+$$F_X^{-1}(u)=x_i, \mbox{ com } F_X(x_{i-1})<u\leq F_X(x_i).$$
+
+
+Para cada valor aleatória requerido é necessário seguir os passos   
+
+(a) gere uma valor aleatório $u$ da distribuição Uniforme$(0, 1)$,
+
+(b) calcule $x_i$ satisfazendo a expressão $F_X(x_{i-1}) < u \leq F(x_i)$.
+
+
+## Ideia
+
+
+```{r , echo = FALSE , fig.align="center", fig.height = 3}
+
+plot(seq(-1,5), pbinom(seq(-1,5), size=4, prob=0.4),lwd=2, type = 's', ylab="Função dist. acumulada", xlab="X")
+segments(-1, 0.4, 1, 0.4, lwd=2, lty=2, col="red")
+segments(1, 0, 1, 0.4, lwd=2, lty=2, col="red")
+```
+
+
+## Exemplo 1 - Adaptado de Rizzo (2007)
+
+
+Utilize o método da transformação inversa para gerar 100 valores aleatórios da distribuição Bernoulli$(p=0,4)$. Logo, $P(X=0)=0,6$ e $P(X=1)=0,4$.  
+
+### Ideia
+```{r , echo = FALSE , fig.align="center", fig.height = 3}
+
+plot(seq(-1,3), pbinom(seq(-1,3), size=1, prob=0.4),lwd=2, type = 's', ylab="Função dist. acumulada", xlab="X")
+segments(-1, 0.4, 0, 0.4, lwd=2, lty=2, col="red")
+segments(0, 0, 0, 0.4, lwd=2, lty=2, col="red")
+segments(-1, 0.8, 1, 0.8, lwd=2, lty=2, col="blue")
+segments(1, 0, 1, 0.8, lwd=2, lty=2, col="blue")
+```
+
+
+
+Note que $F_X(0)=P(X=0)=0,6$ e $F_X(1)=1$. Logo, $F_X^{-1}(u)=1$ se $u>0,6$, e $F_X^{-1}(u)=0$ se $u\leq 0,6$.
+
+
+```{r}
+set.seed(2023)
+n <- 100
+u <- runif(n)
+head(u)
+
+x <- ifelse(u > 0.6, 1, 0)
+head(x)
+
+# uma outra maneira é x <- as.integer(u > 0.6)
+
+# resumo dos valores gerados
+table(x)/n
+cat("média=", mean(x))
+
+# Plot da função acumulada 
+plot(c(-1, 0, 1, 2), c(0, 0.62, 1, 1), lwd = 2, type = 's', ylab = "Função distribuição acumulada", 
+     xlab = "X", xlim = c(-1, 2))
+
+```
+
+
+### **Nota:** veja a seguir outras formas de gerar valores da distribuição Bernoulli$(p=0,4)$ no R
+
+```{r}
+set.seed(2023)
+n <- 100
+
+## usando a v.a. binomial
+
+x1 <- rbinom(n, size = 1, prob = 0.4)
+table(x1)
+cat("média=", mean(x1), "\n")
+
+set.seed(2023)
+## usando a função sample
+x2 <- sample(c(0, 1), size = n, replace = TRUE, prob = c(0.6, 0.4))
+table(x2)
+cat("média=", mean(x2))
+```
+
+
+## Exemplo 2 - Adaptado de Rizzo (2007)
+
+
+Utilize o método da transformação inversa para gerar 1.000 valores aleatórios da distribuição geométrica com parâmetro $p=1/4$. 
+
+
+
+Adote que a distribuição geométrica, com parâmetro $p$, é dada por 
+
+$$P(X=x)=pq^x, \ x=0, 1, 2, \ldots,$$
+sendo que $q=1-p$.
+
+
+Note que os pontos de descontinuidade da distribuição acumulada são $x=0, 1, 2, \ldots$ e a distribuição acumulada é dada por 
+$$F(x)=1-q^{x+1}, x\geq 0,$$
+
+pois
+
+1. se $x=0$, $F(0)=1-q^{0+1}=1-q=1-(1-p)=p$, 
+2. se $x=1$, $F(1)=1-q^{1+1}=1-q^2=1-(1-p)^2=1-(1-2p+p^2)=2p-p^2=p+p(1-p)=p+pq$.
+
+
+A ideia da demonstração deste resultado é feita por indução matemática.
+
+
+
+Logo, para cada valor aleatório requerido precisamos gerar um valor aleatório $u$ e encontrar o valor de $x$ da expressão
+
+$$
+\begin{aligned}
+F_X(x-1)&<u\leq F_X(x) \\
+1-q^x&<u\leq 1-q^{x+1}.
+\end{aligned}
+$$
+
+Resolvendo $1-q^x<u$, temos $x<log(1-u)/log(q)$. Enquanto que $u\leq 1-q^{x+1}$ pode ser escrito como $log(1-u)/log(q) \leq x+1$, logo 
+
+$$x<log(1-u)/log(q) \leq x+1,$$
+
+sendo que o valor de $x$ é o maior valor inteiro que é menor ou igual a $log(1-u)/log(q)$.
+
+
+```{r}
+set.seed(2023)
+n <- 1000
+u <- runif(n)
+p <- 1/4
+x <- floor(log(1 - u)/log( 1- p))
+
+# resumo dos valores gerados
+
+print("Resumos")
+
+summary(x)
+
+# Tabela dos valores gerados
+print("Tabela dos valores gerados")
+table(x)/n
+
+# A média da dist geo(p) é dada por (1-p)/p
+# A variância da dist geo(p) é dada por (1-p)/p^2
+
+cat("A média da dist geo(p) é ", (1-p)/p, "\n")
+
+cat("A média cálculada a partir da amostra é ", mean(x), "\n")
+
+cat("A variância da dist geo(p) é ", (1-p)/p^2, "\n")
+
+cat("A variância cálculada a partir da amostra é ", var(x), "\n")
+
+# densidade estimada pelo histograma 
+hist(x, prob=T, main="Geo(p=0.25)", ylab="Probabilidade", ylim=c(0, 0.2))   
+y <- seq(0, max(x))
+
+# Calculo da probabilidade
+points(y, p*(1-p)^y, col="red")  
+
+```
+
+
+
+## Exercícios
+
+1. Utilize o método da transformação inversa para gerar 200 valores aleatórios da distribuição 
+
+\begin{center}
+\begin{tabular}{c|ccccc}
+        x      &  0  & 1   & 2   & 3   & 4 \\
+        \hline
+        P(X=x) & 0,2 & 0,3 & 0,1 & 0,1 & 0,3 \\
+\end{tabular}
+\end{center}
+
+Faça comparação entre os valores gerados e os esperados. 
+
+
+
+2. Utilize o método da transformação inversa para gerar 1.000 valores aleatórios da distribuição binomial \linebreak ($n=3,p=0.5$). Faça comparação entre os valores gerados e os esperados. 
+
+

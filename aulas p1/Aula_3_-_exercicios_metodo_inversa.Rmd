@@ -1,0 +1,130 @@
+---
+title: "Aula 3 - Exercícios do Método da transformação inversa"
+author: "Prof. Dr. Eder Angelo Milani"
+date: "26/04/2023"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Exercício 1 
+
+Considere a distribuição triangular dada por 
+
+$$\begin{aligned}
+f(x) & = 4x,\mbox{se } 0 < x < 1/2\\
+& = 4-4x, \mbox{se } 1/2\leq x < 1 \\
+& = 0, \mbox{caso contrário}
+\end{aligned}$$
+
+
+Utilizando o método da transformação inversa e apenas valores da distribuição uniforme, gerar 2.000 valores da distribuição triangular definida acima. Obter o histograma com a curva da distribuição.
+
+**Solução:**
+
+
+Inicialmente, precisamos calcular a distribuição acumulada, que é dada por 
+
+
+Para $x<1/2$, 
+
+$$F(x) = \int_0^x 4t dt = 2t^2 \Big|_0^x = 2x^2$$
+
+
+Para $1/2\leq x < 1$
+
+$$F(x) = \frac{1}{2} + \int_{1/2}^x 4-4t dt = \frac{1}{2} + [4t - 2t^2]_{1/2}^x = \frac{1}{2} + [4x-2x^2-2+\frac{1}{2}]=-2x^2+4x-1$$
+A transformação inversa da parte $0<u<1/2$ é obtida isolando $x$ da equação $2x^2=u$. Enquanto que para $1/2<u<1$, é preciso isolar o $x$ da equação de segundo grau dada por $-2x^2+4x-1-u$. Na equação de segundo grau, será obtido dois valores de $x$ que satisfazem a equação, no entanto, um deles fica fora do intervalo (0,1), que é o intervalo onde a distribuição é definida.
+
+Logo, a transformação inversa é dada por 
+
+$$\begin{aligned}
+F^{-1}(u) & = \sqrt{u/2},\mbox{se } 0 < u < 1/2\\
+& = 1-\frac{\sqrt{8(1-u)}}{4}, \mbox{se } 1/2 \leq u < 1 \end{aligned}$$
+
+
+A seguir é programado o método da transformação inversa. 
+
+```{r}
+set.seed(2023)
+n <- 2000
+u <- runif(n)
+x1 <- ifelse(u < 0.5, sqrt(u / 2), 1 - sqrt(8 * (1 - u)) / 4)
+hist(x1, freq=F, ylim=c(0, 2))
+t <- seq(0, 1, by = 0.01)
+lines(t, ifelse(t < 0.5, 4 * t, 4 - 4 * t), col="red")
+
+```
+
+\newpage
+
+# Exercício 2 
+
+Utilizando apenas a geração de valores aleatórios da distribuição Uniforme(0,1), encontrar uma amostra de tamanho 1.000 da distribuição
+Exponencial deslocada com parâmetros $\lambda=0.75$ e $\tau=10$ ($f(x)=\lambda\exp(-\lambda (x-\tau)), \ x>\tau>0$). Compare o resultado obtido utilizando o histograma.
+
+
+## Solução 
+
+Inicialmente devemos calcular a função distribuição acumulada, que é dada por 
+
+$$
+\begin{aligned}
+F(x)&=&\int_\tau^x \lambda \exp(-\lambda(t-\tau))dx\\
+&=&\lambda \exp(\lambda\tau))\int_\tau^x \exp(-\lambda t)dx\\
+&=&\lambda \exp(\lambda\tau)) \Big[ -\frac{1}{\lambda}\exp(-\lambda t)\Big]_\tau^x \\
+&=&\lambda \exp(\lambda\tau)) \Big[\frac{1}{\lambda}\exp(-\lambda \tau)-\frac{1}{\lambda}\exp(-\lambda x)\Big]\\
+&=& 1-\exp(-\lambda(x-\tau))
+\end{aligned} 
+$$
+
+Com este resultado conseguimos obter a função inversa, que é dada por 
+
+$$f^{-1}(u)=-\frac{log(1-u)}{\lambda}+\tau$$
+
+Com essas informações, o código fica da seguinte forma
+
+```{r}
+set.seed(2023)
+n <- 1000
+u <- runif(n)
+lambda <- 0.75
+tau <- 10
+x <- -(1 / lambda) * log(1 - u) + tau
+# densidade estimada pelo histograma 
+hist(x, prob=T, main=expression(f(x)==lambda*exp(-lambda*(x-tau))), ylab="Densidade")   
+y <- seq(10, 20, 0.01)
+# curva da função f(x)
+lines(y, lambda * exp(- lambda * (y - tau)), col="red")  
+# resumo dos valores gerados
+summary(x)
+```
+
+\newpage
+
+# Exercício 3
+
+Simule 10.000 valores da v.a. $X$ que assume apenas os valores $1,2,3, 4$ e $5$, todos com probabilidade $0,20$, ou seja, $X$ tem distribuição Uniforme Discreta. Construa uma tabela de frequência e compare os valores empíricos com os valores teóricos. 
+
+## Solução 
+```{r}
+#utilizando o método da transformação inversa
+set.seed(2023)
+n <- 10000
+u <- runif(n)
+x <- ifelse(u<0.2,1, 
+            ifelse(u<0.4, 2, 
+                   ifelse(u<0.6,3, 
+                          ifelse(u<0.8, 4, 5))))
+
+table(x) / 10000
+
+# não utiliza o método da transformação inversa
+set.seed(2023)
+n <- 10000
+x1 <- round(0.5 + 5 * runif(n))
+table(x1) / 10000
+
+```

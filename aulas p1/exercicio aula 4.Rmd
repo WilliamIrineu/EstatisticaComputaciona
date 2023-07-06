@@ -1,0 +1,73 @@
+---
+title: "EXERCICIOS 1 aula 4"
+author: "WILLIAM IRINEU"
+date: "2023-05-07"
+output:
+  word_document: default
+  html_document: default
+  pdf_document: default
+---
+## AULA 4 ACEITACAO E REJEICAO
+
+```{r setup, include=TRUE}
+
+#exercicio 1 aula 2
+
+#plotando a função beta(3,3)
+x=function(x){30*x^2*(1-x)^2}
+
+#funcao
+plot(x,ylim=c(0,3),xlim = c(-1,2))
+#funcao entre 0 e 1
+plot(x)
+#plotando linha no x=1/2 (meio) ponto de maximo entre 0 e 1
+
+abline(v = 0.5, col = "red", lwd = 2)
+
+#declarando a funcao beta(3,3) dividido pela funcao g, multiplicado pela constante c
+
+c=1/2 #declarando constante
+fgc=function(x)
+	{res=30*(x^2)*(1-x)^2*c}
+
+# Algoritmo  
+
+set.seed(2023)
+n <- 100000
+x <- numeric(n) # amostra requerida 
+cont <- 0  # vai contar até atingir o tamanho amostral
+j <- 0 # vai contar as iterações 
+
+while(cont<n)
+{
+  
+  u <- runif(1)
+  j <- j+1
+  y <- runif(1) # gerando valores da densidade g
+  if(fgc(y)>u){
+    
+    cont <- cont+1 
+    x[cont] <- y
+                }
+}
+
+#histograma dos valores gerados
+hist(x,prob=T, main=expression("Beta"(alpha==3, beta==3)), ylab="Densidade",ylim=c(0,2))   
+aux <- seq(0,1,0.01)
+
+# curva da densidade beta(2,2)
+lines(aux,dbeta(aux,3,3), col="red") 
+
+
+cat("Quant. de iteracoes=",j, "\n")
+
+# Para comparar a amostra obtida por meio dos decis - percentis
+
+p <- seq(0.1,0.9,0.1)
+Dhat <- quantile(x,p)
+D <- qbeta(p,3,2)
+
+round(rbind(Dhat, D),3)
+
+```
+

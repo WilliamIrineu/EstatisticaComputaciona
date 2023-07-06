@@ -1,0 +1,210 @@
+---
+title: "Aula 5: Método da Transformação"
+author: "Prof. Dr. Eder Angelo Milani"
+date: "08/05/2023"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Método da Transformação 
+
+
+Muitos tipos de transformações, diferentes da transformação inversa, podem ser aplicados para simular valores de variáveis aleatórias. Alguns exemplos são:
+
+1. Se $Z \sim N(0,1)$, então $V=Z^2 \sim \chi^2(1)$.
+
+
+2. Se $U \sim \chi^2(m)$ e $V \sim \chi^2(n)$ são independentes, então $F=\frac{U/m}{V/n}$ tem distribuição $F$ com $(m,n)$ graus de liberdade.
+
+
+3. Se $Z \sim N(0,1)$ e $V\sim \chi^2(n)$ são independentes, então $T=\frac{Z}{\sqrt{V/n}}$ tem distribuição $t$ Student com $n$ graus de liberdade.
+
+4. Se $U, V \sim U(0,1)$ são independentes, então 
+- $Z_1=\sqrt{-2log(U)}cos(2\pi V)$
+- $Z_2=\sqrt{-2log(V)}cos(2\pi U)$
+
+são v.a. independentes normal padrão. 
+
+5. Se $U \sim Gama(r,\lambda)$ e $V\sim Gama(s, \lambda)$  são independentes, então $X=\frac{U}{U+V}$ tem distribuição beta$(r,s)$.
+
+
+6. Se $U, V \sim U(0,1)$ são independentes, então 
+
+$$X= \Big\lfloor1+\frac{log(V)}{log(1-(1-\theta)^U)}\Big\rfloor$$
+tem distribuição logaritimica$(\theta)$, sendo que $\lfloor t \rfloor$ denota a parte inteira de $t$. 
+
+
+## Exemplo 1
+
+
+A seguinte relação entre as distribuições beta e gama fornece um gerador da distribuição beta.
+
+Se $U \sim Gama(r,\lambda)$ e $V\sim Gama(s, \lambda)$  são independentes, então 
+$$X=\frac{U}{U+V}$$
+tem distribuição beta$(r,s)$. Os passos a seguir fornecem um gerador de valores aleatórios da distribuição beta$(a,b)$
+
+
+Passo 1) Gerar um valor aleatório $u$ da distribuição Gama$(a,1)$,
+
+Passo 2) Gerar um valor aleatório $v$ da distribuição Gama$(b,1)$,
+
+Passo 3) Calcular $x=\frac{u}{u+v}$.
+
+
+```{r}
+set.seed(2022)
+
+# so usei rgamma pq ainda nao sabemos gerar da distribuicao gama
+
+r_beta <- function(n,a,b){
+  u <- rgamma(n, shape=a, rate=1) 
+  v <- rgamma(n, shape=b, rate=1)
+  x <- u/(u + v)
+  return(x)
+}
+
+# considerando a=3 e b=2 
+
+x <- r_beta(1000, 3, 2)
+
+hist(x, prob=T, main="Beta(3, 2)", ylab="Densidade")   
+aux<-seq(0, 1, 0.01)
+# curva da densidade beta(3,2)
+lines(aux, dbeta(aux, 3, 2), col="red")  
+
+# Para comparar a amostra obtida por meio dos decis - percentis
+
+p <- seq(0.1, 0.9, 0.1)
+Dhat <- quantile(x, p)
+D <- qbeta(p, 3, 2)
+
+round(rbind(Dhat, D), 3)
+
+# Grafico qqplot - quantil -quantil
+
+q <- qbeta(ppoints(1000), 3, 2)
+qqplot(q, x, xlab="Quantil Beta(3,2)", ylab="Quantil Amostral", cex=0.25)
+abline(0,1)
+
+```
+
+
+
+# Convolução
+
+
+As somas e combinações de variáveis aleatórias são tipos especias de transformações.
+
+Sejam $X_1, \ldots, X_n$ v.a.i.i.d com $X_j \sim X$, e seja $S=X_1+\ldots+X_n$. A função densidade/probabilidade da soma $S$ é chamada de convolução $n$ vezes de $X$ e é denotada por $F^{*(n)}_X$. Sendo assim, é muito simples simular uma convolução gerando diretamente de $X_1, \ldots, X_n$ e calculando a soma.  
+
+
+Vejamos a seguir alguns exemplos de transformações utilizando apenas soma de variáveis aleatórias. 
+
+1. Se $v>0$ for um número inteiro, a distribuição qui-quadrado com $v$ graus de liberdade é a convolução de $v$ variáveis aleatórias independente e identicamente distribuídas normais padrão ao quadrado. 
+
+2. A distribuição binomial negativa NegBin$(r,p)$ é a convolução de $r$ variáveis aleatórias independente e identicamente distribuídas Geom($p$).
+
+3. A convolução de $r$ variáveis aleatórias independente e identicamente distribuídas com Exp$(\lambda)$ tem distribuição Gama($r, \lambda$).
+
+
+
+
+
+## Exemplo 2
+
+Repetir o exemplo anterior, substituindo a função `rgamma`. 
+
+
+Para gerar valores da distribuição gama inicialmente precisamos gerar valores da distribuição exponencial. Para isso, utilzamos o método da transformação inversa. 
+
+
+Note que, se $X\sim Exp(\alpha)$, então 
+
+$$f(x)= \alpha \exp(-\alpha x)$$ 
+
+e
+
+$$F(x)= 1- \exp(-\alpha x)$$ 
+
+Logo, a função inversa é dada por 
+
+$$F^{-1}(u)= -\log(1-u)/\alpha$$
+
+```{r}
+set.seed(2022)
+
+r_exp <- function(n,alpha){
+  u <- runif(n)
+  x <-  -log(1-u)/alpha
+  return(x)
+}
+
+
+r_gama <-  function(m, alpha, beta){
+  x <- numeric(m)
+  for(k in 1:m){  
+  aux <- 0
+    for(i in 1:beta){
+      aux <- aux + r_exp(1, alpha)
+    }
+  x[k] <- aux
+}
+  return(x)
+}
+  
+r_beta <- function(n, a, b){
+  u <- r_gama(n, 1, a) 
+  v <- r_gama(n, 1, b)
+  x <- u/(u+v)
+  return(x)
+}
+
+# considerando a=3 e b=2 
+
+x <- r_beta(1000, 3, 2)
+
+hist(x, prob=T, main="Beta(3, 2)", ylab="Densidade")   
+aux<-seq(0,1,0.01)
+# curva da densidade beta(3,2)
+lines(aux,dbeta(aux,3,2), col="red")  
+
+# Para comparar a amostra obtida por meio dos decis - percentis
+
+p <- seq(0.1, 0.9, 0.1)
+Dhat <- quantile(x, p)
+D <- qbeta(p, 3, 2)
+
+round(rbind(Dhat, D),3)
+
+# Grafico qqplot - quantil -quantil
+
+q <- qbeta(ppoints(1000), 3, 2)
+qqplot(q, x, xlab="Quantil Beta(3,2)", ylab="Quantil Amostral", cex=0.25)
+abline(0, 1)
+
+```
+
+
+
+## Exercícios
+
+1. Gerar uma amostra da distribuição normal com média $\mu=2$ e variância $\sigma^2=10$. Compare o resultado utilizando o gráfico do quantil teórico com o quantil amostral.
+
+
+2. Gerar 500 valores da distribuição $t$-Studente com 4 graus de liberdade, utilizando apenas valores da distribuição uniforme. Compare o resultado utilizando o histograma e a função densidade.
+
+
+3. Gerar 200 valores da distribuição Binomila($n=3, p=0.2$), utilizando convolução. Compare os resultados obtidos com os esperados utilizando uma tabela de frequência.
+
+
+
+**Nota:** Veja neste link a relação de algumas distribuições  
+
+
+http://www.math.wm.edu/~leemis/chart/UDR/UDR.html
+
+
+

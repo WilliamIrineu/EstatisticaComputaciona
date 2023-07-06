@@ -1,0 +1,583 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Aula 13: Otimização numérica - Aspectos Computacionais},
+  pdfauthor={Prof.~Dr.~Eder Angelo Milani},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Aula 13: Otimização numérica - Aspectos Computacionais}
+\author{Prof.~Dr.~Eder Angelo Milani}
+\date{19/06/2023}
+
+\begin{document}
+\maketitle
+
+A seguir é apresentado algumas funções interessantes no R que podem
+ajudar na difícil tarefa de otimização de funções.
+
+\hypertarget{funuxe7uxf5es-hessian-e-grad-no-r}{%
+\section{Funções hessian e grad no
+R}\label{funuxe7uxf5es-hessian-e-grad-no-r}}
+
+O método de Newton-Raphson, que além do gradiente, usa o hessiano e é
+apropriado para calcular estimadores de máxima verossimilhança por meio
+de uma aproximação quadrática da verossimilhança ao redor de valores
+iniciais dos parâmetros, apresenta a dificuldade dos cálculos teóricos.
+
+Uma alternativa é a obtenção dos valores necessários por meio de
+aproximações numéricas. Veja o exemplo a seguir.
+
+\hypertarget{exemplo-1}{%
+\subsection{Exemplo 1}\label{exemplo-1}}
+
+Voltando ao Exemplo 2 da Aula 10, foi gerado uma amostra da distribuição
+Weibull(\(\alpha, \gamma\)), na sequência foi obtido as funções de
+verossimilhança, log-verossimilhança, vetor escore e matriz hessiana.
+
+Podemos utilizar funções no R que calculam, de forma aproximada, o vetor
+escore e a matriz hessiana. Portanto, facilitando o processo como um
+todo.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{2023}\NormalTok{)}
+\NormalTok{n }\OtherTok{\textless{}{-}} \DecValTok{1000}
+\NormalTok{alpha }\OtherTok{\textless{}{-}} \DecValTok{2}
+\NormalTok{gama }\OtherTok{\textless{}{-}} \FloatTok{0.5}
+
+\NormalTok{x}\OtherTok{\textless{}{-}} \FunctionTok{rweibull}\NormalTok{(n, }\AttributeTok{shape =}\NormalTok{gama , }\AttributeTok{scale =}\NormalTok{ alpha)}
+
+\FunctionTok{summary}\NormalTok{(x)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+##   0.0000   0.1802   1.1010   3.9462   4.1123 125.5789
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# o valor esperado e}
+\NormalTok{alpha}\SpecialCharTok{*}\FunctionTok{gamma}\NormalTok{(}\DecValTok{1}\SpecialCharTok{+}\DecValTok{1}\SpecialCharTok{/}\NormalTok{gama)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 4
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# construir a funcao objeto }
+
+\NormalTok{log\_vero }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(p0)\{}
+\NormalTok{  alpha }\OtherTok{\textless{}{-}}\NormalTok{ p0[}\DecValTok{1}\NormalTok{]}
+\NormalTok{  gama }\OtherTok{\textless{}{-}}\NormalTok{ p0[}\DecValTok{2}\NormalTok{]}
+\NormalTok{  n }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(x)}
+\NormalTok{  aux }\OtherTok{\textless{}{-}}\NormalTok{ n}\SpecialCharTok{*}\FunctionTok{log}\NormalTok{(gama) }\SpecialCharTok{{-}}\NormalTok{ n}\SpecialCharTok{*}\NormalTok{gama}\SpecialCharTok{*}\FunctionTok{log}\NormalTok{(alpha) }\SpecialCharTok{+}\NormalTok{ (gama}\DecValTok{{-}1}\NormalTok{)}\SpecialCharTok{*}\FunctionTok{sum}\NormalTok{(}\FunctionTok{log}\NormalTok{(x)) }\SpecialCharTok{{-}} \FunctionTok{sum}\NormalTok{((x}\SpecialCharTok{/}\NormalTok{alpha)}\SpecialCharTok{\^{}}\NormalTok{gama)}
+  \FunctionTok{return}\NormalTok{(aux)}
+\NormalTok{\}}
+
+\CommentTok{\# teste da funcao }
+\FunctionTok{log\_vero}\NormalTok{(}\AttributeTok{p0=}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\FloatTok{0.5}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] -1938.947
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# pacote a ser carregado}
+\FunctionTok{library}\NormalTok{(numDeriv)}
+
+\CommentTok{\# o vetor escore }
+\FunctionTok{grad}\NormalTok{(log\_vero, }\AttributeTok{x=}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\FloatTok{0.5}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1]  217.3866 -545.4308
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# a matriz hessian}
+\FunctionTok{hessian}\NormalTok{(log\_vero, }\AttributeTok{x=}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\FloatTok{0.5}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##          [,1]       [,2]
+## [1,] -576.080   1518.516
+## [2,] 1518.516 -10737.908
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# metodo de newton{-}raphson}
+
+\NormalTok{n.max }\OtherTok{\textless{}{-}} \DecValTok{100}
+\NormalTok{theta }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(}\ConstantTok{NA}\NormalTok{, }\AttributeTok{nrow=}\DecValTok{2}\NormalTok{, }\AttributeTok{ncol=}\NormalTok{n.max)}
+\NormalTok{dif\_ }\OtherTok{\textless{}{-}} \DecValTok{1}
+\NormalTok{epsilon }\OtherTok{\textless{}{-}} \FloatTok{0.001}
+\NormalTok{cont }\OtherTok{\textless{}{-}} \DecValTok{1}
+\NormalTok{theta[, }\DecValTok{1}\NormalTok{] }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{)}
+
+\ControlFlowTok{while}\NormalTok{(}\FunctionTok{abs}\NormalTok{(dif\_)}\SpecialCharTok{\textgreater{}=}\NormalTok{ epsilon }\SpecialCharTok{\&}\NormalTok{ cont}\SpecialCharTok{\textless{}=}\NormalTok{n.max)\{}
+  \FunctionTok{cat}\NormalTok{(}\StringTok{"cont+1="}\NormalTok{, cont}\SpecialCharTok{+}\DecValTok{1}\NormalTok{, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\NormalTok{  theta[ ,cont}\SpecialCharTok{+}\DecValTok{1}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ theta[ ,cont] }\SpecialCharTok{{-}} \FunctionTok{solve}\NormalTok{(}\FunctionTok{hessian}\NormalTok{(log\_vero, theta[ ,cont]))}\SpecialCharTok{\%*\%}\FunctionTok{grad}\NormalTok{(log\_vero, theta[ ,cont])}
+  \FunctionTok{cat}\NormalTok{(}\StringTok{"theta["}\NormalTok{, cont}\SpecialCharTok{+}\DecValTok{1}\NormalTok{, }\StringTok{"]="}\NormalTok{, theta[ ,cont}\SpecialCharTok{+}\DecValTok{1}\NormalTok{], }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\NormalTok{  dif\_ }\OtherTok{\textless{}{-}} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{sum}\NormalTok{((theta[ ,cont}\SpecialCharTok{+}\DecValTok{1}\NormalTok{]}\SpecialCharTok{{-}}\NormalTok{theta[ ,cont])}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+  \FunctionTok{cat}\NormalTok{(}\StringTok{"dif="}\NormalTok{, dif\_, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\NormalTok{  cont }\OtherTok{\textless{}{-}}\NormalTok{ cont}\SpecialCharTok{+}\DecValTok{1}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## cont+1= 2 
+## theta[ 2 ]= 0.8781681 1.677699 
+## dif= 0.3445592 
+## cont+1= 3 
+## theta[ 3 ]= 0.7362294 1.334386 
+## dif= 0.3714973 
+## cont+1= 4 
+## theta[ 4 ]= 0.5547017 0.9573204 
+## dif= 0.4184863 
+## cont+1= 5 
+## theta[ 5 ]= 0.3563464 0.5738512 
+## dif= 0.4317331 
+## cont+1= 6 
+## theta[ 6 ]= 0.3312675 0.381048 
+## dif= 0.1944274 
+## cont+1= 7 
+## theta[ 7 ]= 0.5641077 0.4181372 
+## dif= 0.2357757 
+## cont+1= 8 
+## theta[ 8 ]= 0.9305036 0.4671185 
+## dif= 0.3696554 
+## cont+1= 9 
+## theta[ 9 ]= 1.378278 0.501388 
+## dif= 0.4490838 
+## cont+1= 10 
+## theta[ 10 ]= 1.790903 0.5153879 
+## dif= 0.412862 
+## cont+1= 11 
+## theta[ 11 ]= 2.041855 0.5178614 
+## dif= 0.2509642 
+## cont+1= 12 
+## theta[ 12 ]= 2.112259 0.5178338 
+## dif= 0.07040396 
+## cont+1= 13 
+## theta[ 13 ]= 2.116738 0.5178167 
+## dif= 0.004479602 
+## cont+1= 14 
+## theta[ 14 ]= 2.116755 0.5178166 
+## dif= 1.699994e-05
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cont}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 14
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{theta[, }\DecValTok{1}\SpecialCharTok{:}\NormalTok{cont]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      [,1]      [,2]      [,3]      [,4]      [,5]      [,6]      [,7]      [,8]
+## [1,]    1 0.8781681 0.7362294 0.5547017 0.3563464 0.3312675 0.5641077 0.9305036
+## [2,]    2 1.6776988 1.3343860 0.9573204 0.5738512 0.3810480 0.4181372 0.4671185
+##          [,9]     [,10]     [,11]     [,12]     [,13]     [,14]
+## [1,] 1.378278 1.7909026 2.0418546 2.1122585 2.1167381 2.1167551
+## [2,] 0.501388 0.5153879 0.5178614 0.5178338 0.5178167 0.5178166
+\end{verbatim}
+
+Compare os resultados obtidos aqui com os resultados da Aula 10.
+
+\hypertarget{funuxe7uxf5es-optim-e-maxlik}{%
+\section{Funções optim e MaxLik}\label{funuxe7uxf5es-optim-e-maxlik}}
+
+Para obter máximos ou mínimos de funções pode-se usar a função
+\texttt{optim()} do pacote \texttt{stats}, que inclui vários métodos de
+otimização, dentre os quais destacamos:
+
+\begin{enumerate}
+\def\labelenumi{\roman{enumi})}
+\item
+  o método default que é o Método Simplex de Nelder e Mead (1965), e
+  corresponde a um método de busca não gradiente,
+\item
+  o método BFGS,
+\item
+  o método do gradiente conjugado (conjugate gradient - CG),
+\item
+  o método L-BFGS-B, que permite restrições limitadas,
+\item
+  o método SANN, que é método não gradiente e pode ser encarado como uma
+  variante do método da têmpera simulada (simulated annealing).
+\end{enumerate}
+
+Outra opção é o pacote \texttt{optimization}, que também inclui vários
+métodos, como o método Nelder-Mead e da têmpera simulada. O pacote
+\texttt{maxLik} também é uma opção, contendo quase todas as funções do
+\texttt{stats}, além do algoritmo de \texttt{Newton–Rapson} (função
+\texttt{maxNR()}). Esse pacote é apropriado para a maximização de
+verossimilhanças, daí o rótulo maxLik.
+
+\hypertarget{exemplo-2}{%
+\subsection{Exemplo 2}\label{exemplo-2}}
+
+Considere a função \(f(x,y)=\exp(-(x+ y))\), que tem um máximo no ponto
+(0, 0) e valor máximo igual a 1. A seguir é apresentado a função
+\texttt{maxNR()} para obter o ponto de máximo.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#install.packages("maxLik")}
+\FunctionTok{library}\NormalTok{(}\StringTok{"maxLik"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: package 'maxLik' was built under R version 4.3.1
+\end{verbatim}
+
+\begin{verbatim}
+## Carregando pacotes exigidos: miscTools
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: package 'miscTools' was built under R version 4.3.1
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Please cite the 'maxLik' package as:
+## Henningsen, Arne and Toomet, Ott (2011). maxLik: A package for maximum likelihood estimation in R. Computational Statistics 26(3), 443-458. DOI 10.1007/s00180-010-0217-1.
+## 
+## If you have questions, suggestions, or comments regarding the 'maxLik' package, please use a forum or 'tracker' at maxLik's R-Forge site:
+## https://r-forge.r-project.org/projects/maxlik/
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'maxLik'
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:numDeriv':
+## 
+##     hessian
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{f1 }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(theta)\{ }
+\NormalTok{x }\OtherTok{\textless{}{-}}\NormalTok{ theta[}\DecValTok{1}\NormalTok{]}
+\NormalTok{y }\OtherTok{\textless{}{-}}\NormalTok{ theta[}\DecValTok{2}\NormalTok{]}
+\NormalTok{z }\OtherTok{\textless{}{-}} \FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{(x}\SpecialCharTok{\^{}}\DecValTok{2}\SpecialCharTok{+}\NormalTok{y}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+\FunctionTok{return}\NormalTok{(z)}
+\NormalTok{\}}
+
+\NormalTok{result }\OtherTok{\textless{}{-}} \FunctionTok{maxNR}\NormalTok{(f1, }\AttributeTok{start=}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{))}
+
+\FunctionTok{print}\NormalTok{(}\FunctionTok{summary}\NormalTok{(result))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## --------------------------------------------
+## Newton-Raphson maximisation 
+## Number of iterations: 3 
+## Return code: 1 
+## gradient close to zero (gradtol) 
+## Function value: 1 
+## Estimates:
+##          estimate gradient
+## [1,] 1.044902e-11        0
+## [2,] 1.044902e-11        0
+## --------------------------------------------
+\end{verbatim}
+
+\hypertarget{exemplo-3}{%
+\subsection{Exemplo 3}\label{exemplo-3}}
+
+Uma função comumente usada como teste em otimização é a função de
+Rosenbrock, ou função banana
+
+\[f(x,y)=(1-x)^2+100(y-x^2)^2,\]
+
+Essa função tem um mínimo global em (1, 1). Os resultados da aplicação
+da função \texttt{optim()} para determinar o mínimo dessa função, usando
+diferentes métodos são apresentados a seguir.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{f1 }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(theta)\{ }
+\NormalTok{x }\OtherTok{\textless{}{-}}\NormalTok{ theta[}\DecValTok{1}\NormalTok{]}
+\NormalTok{y }\OtherTok{\textless{}{-}}\NormalTok{ theta[}\DecValTok{2}\NormalTok{]}
+\CommentTok{\#cat("x=", x, "y=", y, "\textbackslash{}n")}
+\NormalTok{z }\OtherTok{\textless{}{-}}\NormalTok{ (}\DecValTok{1}\SpecialCharTok{{-}}\NormalTok{x)}\SpecialCharTok{\^{}}\DecValTok{2} \SpecialCharTok{+} \DecValTok{100}\SpecialCharTok{*}\NormalTok{(y}\SpecialCharTok{{-}}\NormalTok{x}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}\SpecialCharTok{\^{}}\DecValTok{2}
+\FunctionTok{return}\NormalTok{(z)}
+\NormalTok{\}}
+
+\NormalTok{chute }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\FloatTok{1.2}\NormalTok{, }\DecValTok{1}\NormalTok{)}
+
+\CommentTok{\# BFGS}
+
+\FunctionTok{optim}\NormalTok{(chute, f1, }\AttributeTok{method=}\StringTok{"BFGS"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## $par
+## [1] 0.9998044 0.9996084
+## 
+## $value
+## [1] 3.827383e-08
+## 
+## $counts
+## function gradient 
+##      118       38 
+## 
+## $convergence
+## [1] 0
+## 
+## $message
+## NULL
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# L{-}BFGS{-}B}
+
+\FunctionTok{optim}\NormalTok{(chute, f1, }\AttributeTok{method=}\StringTok{"L{-}BFGS{-}B"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## $par
+## [1] 0.9998000 0.9996001
+## 
+## $value
+## [1] 3.998487e-08
+## 
+## $counts
+## function gradient 
+##       49       49 
+## 
+## $convergence
+## [1] 0
+## 
+## $message
+## [1] "CONVERGENCE: REL_REDUCTION_OF_F <= FACTR*EPSMCH"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# CG}
+
+\FunctionTok{optim}\NormalTok{(chute, f1, }\AttributeTok{method=}\StringTok{"CG"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## $par
+## [1] -0.7648079  0.5927148
+## 
+## $value
+## [1] 3.106475
+## 
+## $counts
+## function gradient 
+##      402      101 
+## 
+## $convergence
+## [1] 1
+## 
+## $message
+## NULL
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Nelder{-}Mead}
+
+\FunctionTok{optim}\NormalTok{(chute, f1, }\AttributeTok{method=}\StringTok{"Nelder{-}Mead"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## $par
+## [1] 1.000260 1.000506
+## 
+## $value
+## [1] 8.825241e-08
+## 
+## $counts
+## function gradient 
+##      195       NA 
+## 
+## $convergence
+## [1] 0
+## 
+## $message
+## NULL
+\end{verbatim}
+
+Exercícios:
+
+\textbf{(Entregar na sala de aula)} Gerar 100 valores da distribuição
+normal(\(\mu=3, \sigma^2=4\)). Utilizando o método de Newton-Rapson,
+como feito anteriormente, obtenha as estimativas de máxima
+verossimilhança dos parâmetros \(\mu\) e \(\sigma^2\). Obtenha também a
+estimativa adotando a função \emph{optim} e compare os resultados.
+
+\begin{enumerate}
+\def\labelenumi{(\arabic{enumi})}
+\item
+  Gerar 100 valores da distribuição Poisson(\(\lambda=3\)). Utilizando o
+  método de Newton-Rapson, como feito anteriormente, obtenha a
+  estimativa de máxima verossimilhança do parâmetro \(\lambda\). Obtenha
+  também a estimativa adotando a função \emph{optim} e compare os
+  resultados.
+\item
+  Gerar 300 valores da distribuição Bernoulli(\(p=0,3\)). Utilizando o
+  método de Newton-Rapson, como feito anteriormente, obtenha a
+  estimativa de máxima verossimilhança do parâmetro \(p\). Obtenha
+  também a estimativa adotando a função \emph{optim} e compare os
+  resultados.
+\item
+  Gerar 100 valores da distribuição Exp(\(\lambda=0.3\)). Utilizando o
+  método de Newton-Rapson, como feito anteriormente, obtenha a
+  estimativa de máxima verossimilhança do parâmetro \(\lambda\). Obtenha
+  também a estimativa adotando a função \emph{optim} e compare os
+  resultados.
+\item
+  Gerar 100 valores da distribuição gama(\(\alpha=10, \beta=10\)).
+  Utilizando o método de Newton-Rapson, como feito anteriormente,
+  obtenha as estimativas de máxima verossimilhança dos parâmetros
+  \(\alpha\) e \(\beta\). Obtenha também a estimativa adotando a função
+  \emph{optim} e compare os resultados.
+\item
+  Gerar 100 valores da distribuição beta(\(\alpha=10, \beta=10\)).
+  Utilizando o método de Newton-Rapson, como feito anteriormente,
+  obtenha as estimativas de máxima verossimilhança dos parâmetros
+  \(\alpha\) e \(\beta\). Obtenha também a estimativa adotando a função
+  \emph{optim} e compare os resultados.
+\end{enumerate}
+
+\end{document}

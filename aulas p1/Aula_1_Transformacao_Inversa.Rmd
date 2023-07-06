@@ -1,0 +1,208 @@
+---
+title: "Aula 1 - Transformação Inversa"
+author: "Prof. Dr. Eder Angelo Milani"
+date: "19/04/2023"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Métodos para geração de valores de variáveis aleatórias 
+
+
+Inicialmente, assumimos que um gerador de números pseudo-aleatórios uniforme adequado está disponível no software utilizado. Ao longo das aulas, sempre que mencionar números aleatórios gerados por computador, entende-se que se trata de números pseudo-aleatórios. 
+
+
+Nesta e nas próximas aulas, veremos vários métodos que são usados para gerar valores aleatórias de distribuições de probabilidade discretas e contínuas. No entanto, muitos geradores de valores aleatórios estão disponíveis no R, por exemplo: `rbeta`, `rgeom`, `rchisq`, ..., etc. Mas estes métodos apresentados a seguir são gerais e podem ser aplicados em muitos outros tipos de distribuições. 
+
+
+A função de geração de números pseudo-aleatórios no intervalo unitário no R é `runif`. Para gerar um vetor de *n* números aleatórios entre 0 e 1, use `runif (n)`. Para gerar *n* números aleatórios distribuídos de maneira uniforme no intervalo (a, b), use `runif(n, a, b)`. Para gerar uma matriz de dimensão *n* por *m* de números aleatórios distribuídos de maneira uniforme no intervalo 0 e 1, use `matrix(runif(n*m), nrow = n, ncol = m)` ou `matrix(runif (n*m), n, m)`.
+
+
+## Exemplo 1
+
+
+Gerar 5 valores aleatórios da distribuição uniforme (0, 1). 
+
+```{r}
+
+runif(5, min=0, max=1)
+
+```
+
+
+
+Obs.: os valores que eu obtive são iguais aos valores que você obteve? 
+
+
+#### **Nota:** precisamos utilizar o mesmo `set.seed` para que os nossos resultados sejam iguais.    
+
+
+## Refazendo o Exemplo 1, agora com `set.seed(2023)`
+
+
+```{r}
+set.seed(2023)
+runif(5, min=0, max=1)
+
+```
+
+
+Obs.: e agora, obtemos os mesmos valores? 
+
+
+### **Nota:** a partir de agora, em todos as gerações utilizar `set.seed(2023)`.
+
+
+
+# O Método da Transformação Inversa
+
+O método da transformação inversa de geração é baseado no seguinte resultado.
+
+#### Teorema: 
+
+Se $X$ é uma variável aleatória contínua com função acumulada $F_X(x)$, então 
+
+$$U=F_X(x) \sim \mbox{Uniforme}(0,1).$$  
+
+
+
+#### Ideia
+
+
+```{r , echo = FALSE , fig.align="center"}
+
+plot(seq(-5,5,0.01), pnorm(seq(-5,5,0.01)),lwd=2, type = 'l', ylab="Função distribuição acumulada", xlab="X")
+segments(-5, 0.5, 0, 0.5)
+segments(0, 0, 0, 0.5)
+#axis(2,0.5)
+```
+
+
+
+**Prova:** A transformação inversa, $F^{-1}_X(.)$, é definida por $F^{-1}_X(u)=\inf\{x: F_X(x)=u\}, \ 0<u<1.$
+
+
+Se $U \sim  \mbox{Uniforme}(0,1)$ então para todos $x \in \mathbb{R}$ 
+
+$$
+\begin{aligned}
+P(F^{-1}_X(U) \leq x) &= P(F_X(F^{-1}_X(U)) \leq F_X(x)) \ (note \ que \ F_X \ é \ monótona)\\
+&= P(U\leq F_X(x)) \ (observe \ que \ F_X(F^{-1}_X(U)) = U)\\
+&= F_U(F_X(x)) \ (veja \ que \ F_U(a) = a) \\ 
+&=F_X(x) = P(X \leq x),
+\end{aligned}
+$$
+portanto, $P(F^{-1}_X(U))$ tem a mesma distribuição de $X$. Logo, para gerar uma observação da variável aleatória $X$, primeiramente gerar um valor $u$ da variável Uniforme$(0,1)$ e calcular o valor inverso $F^{-1}_X(u)$. 
+
+
+
+### **Notas:** 
+
+**1.** O método é fácil de ser aplicado, desde que $F^{-1}_X(u)$ seja fácil para calcular. 
+
+**2.** O método pode ser aplicado para gerar valores de v.a. contínua e discreta.
+
+
+### O método pode ser resumido como a seguir
+
+Passo 1) Calcule a inversa da função $F^{-1}_X(u)$.
+
+Passo 2) Escreva um comando ou uma função para calcular $F^{-1}_X(u)$.
+
+Passo 3) Para cada valor aleatória requerido:
+
+(a) gerar uma valor aleatório $u$ da distribuição Uniforme$(0,1)$.
+
+(b) calcular $x=F^{-1}_X(u)$.
+
+
+
+## Exemplo 2 - Adaptado de Rizzo (2007)
+
+
+Utilize o método da transformação inversa para gerar 1.000 valores aleatórios da distribuição com densidade $f_X(x)=3x^2, \ \ 0<x<1$. 
+
+
+
+Note que a função acumulada é dada por $F_X(x)=x^3, \ \ 0<x<1$, logo a função inversa é dada por $F_X^{-1}(u)=u^{1/3}$.  
+
+
+```{r}
+set.seed(2023)
+n <- 1000
+u <- runif(n)
+x <- u^(1/3)  # aplicando a funcao inversa 
+
+
+# densidade estimada pelo histograma 
+hist(x,  prob=T, main=expression(f(x)==3*x^2), ylab="Densidade", ylim=c(0, 3.2))   
+y <- seq(0, 1, 0.01)
+
+# curva da função f(x)
+lines(y, 3*y^2, col="red")  
+
+# resumo dos valores gerados
+summary(x)
+```
+
+
+## Exemplo 3 - Adaptado de Rizzo (2007)
+
+
+Utilize o método da transformação inversa para gerar 100 valores aleatórios da distribuição exponencial com média $1/\lambda$. 
+
+
+#### Observação: 
+
+Se $X\sim \mbox{Exp}(\lambda)$, então $f_X(x)=\lambda \exp(-\lambda x)$.
+
+
+Note que a função acumulada é dada por 
+
+$$F_X(x)=1-\exp(-\lambda x), \ \ x>0,$$
+
+logo a função inversa é dada por 
+
+$$F_X^{-1}(u)=-\frac{1}{\lambda}\log(1-u).$$  
+
+
+```{r}
+set.seed(2023)
+n <- 100
+u <- runif(n)
+lambda <- 0.5
+x <- -(1/lambda) * log(1-u) # aplicando a funcao inversa 
+
+# densidade estimada pelo histograma 
+hist(x, prob=T, main=expression(f(x)==lambda*exp(-lambda*x )), ylab="Densidade")   
+y <- seq(0, 20, 0.01)
+
+# curva da funcao f(x)
+lines(y, lambda*exp(-lambda*y), col="red")  
+
+# resumo dos valores gerados
+summary(x)
+
+# comparacao
+summary(rexp(n, 0.5))
+
+```
+
+
+
+## Exercícios 
+
+
+1. Utilize o método da transformação inversa para gerar 1.000 valores aleatórios da distribuição Weibull($\alpha=2, \sigma=2)$, sendo que a função densidade é dada por 
+
+$$f(x) = \Big(\frac{\alpha}{\sigma}\Big)\Big(\frac{x}{\sigma}\Big)^{\alpha-1}\exp(-(x/\sigma)^\alpha), \ x>0.$$
+Compare os valores obtidos utilizando o método da transformação inversa com uma amostra de mesmo tamanho adquirida da `rweibull`.
+
+2. (Adaptado de Rizzo, 2007) Utilize o método da transformação inversa para gerar 1.000 valores aleatórios da distribuição Laplace padrão, que tem densidade dada por 
+
+$$f_X(x)=\frac{1}{2}\exp(-|x|), \ \ x\in \mathbb{R}.$$ 
+
+A partir dos valores gerados, faça um histograma e compare com a função densidade. 
